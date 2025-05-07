@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My CI/CD Pipeline Achievement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Add Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f3f4f6; /* Light gray background */
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 960px; /* Increased max-width for a wider layout */
+      }
+      /* Custom styles for icons - adjust size as needed */
+      .icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+      .icon-large {
+        font-size: 2rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Happy button styles */
+      .btn-github {
+        background-color: #6366f1; /* Indigo-500 - more vibrant than blue */
+        border: none;
+      }
+      .btn-github:hover {
+        background-color: #4f46e5; /* Indigo-600 */
+      }
+
+      .btn-demo {
+        background-color: #10b981; /* Emerald-500 - happier than standard green */
+        border: none;
+      }
+      .btn-demo:hover {
+        background-color: #059669; /* Emerald-600 */
+      }
+
+      .btn-tutorial {
+        background-color: #f59e0b; /* Amber-500 - warm and friendly */
+        border: none;
+      }
+      .btn-tutorial:hover {
+        background-color: #d97706; /* Amber-600 */
+      }
+
+      /* Modern flow diagram styles */
+      .flow-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 2rem 0;
+      }
+
+      .flow-step {
+        padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        color: white;
+        font-weight: 600;
+      }
+
+      .step-github {
+        background-color: #4285f4;
+      }
+
+      .step-webhook {
+        background-color: #34a853;
+      }
+
+      .step-test {
+        background-color: #8e44ad;
+      }
+
+      .step-build {
+        background-color: #673ab7;
+      }
+
+      .step-deploy {
+        background-color: #ff9800;
+      }
+
+      .step-live {
+        background-color: #ea4335;
+      }
+
+      .flow-arrow {
+        color: #9ca3af;
+        font-size: 1.5rem;
+      }
+
+      .border-accent {
+        border-color: #6366f1;
+      }
+
+      /* Card styling */
+      .component-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .component-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body class="p-4 md:p-8">
+    <div class="container mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10">
+      <header class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+          <i class="fas fa-rocket text-indigo-500 mr-2"></i> My CI/CD Pipeline
+          Achievement
+        </h1>
+        <p class="text-lg text-gray-600">
+          Automating Deployment from Code to Cloud
+        </p>
+      </header>
+
+      <section class="mb-10">
+        <h2
+          class="text-2xl font-semibold text-gray-700 mb-4 border-b-2 border-accent pb-2 flex items-center"
+        >
+          <i class="fas fa-info-circle text-indigo-500 mr-2"></i> Overview
+        </h2>
+        <p class="text-gray-700">
+          I'm excited to share a key achievement: successfully implementing a
+          Continuous Integration and Continuous Deployment (CI/CD) pipeline.
+          This project automates the process of deploying a simple Node.js web
+          application from source control (GitHub) to an AWS EC2 instance,
+          significantly streamlining the development and release cycle.
+        </p>
+      </section>
+
+      <section class="mb-10">
+        <h2
+          class="text-2xl font-semibold text-gray-700 mb-4 border-b-2 border-accent pb-2 flex items-center"
+        >
+          <i class="fas fa-puzzle-piece text-indigo-500 mr-2"></i> Key
+          Components
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm component-card"
+          >
+            <i class="fab fa-github icon-large text-gray-800 mr-3"></i>
+            <p class="text-gray-700 font-medium">
+              GitHub (Source Control & Actions)
+            </p>
+          </div>
+          <div
+            class="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm component-card"
+          >
+            <i class="fab fa-node-js icon-large text-green-600 mr-3"></i>
+            <p class="text-gray-700 font-medium">
+              Node.js (Application Runtime)
+            </p>
+          </div>
+          <div
+            class="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm component-card"
+          >
+            <i class="fab fa-aws icon-large text-orange-500 mr-3"></i>
+            <p class="text-gray-700 font-medium">
+              AWS EC2 (Hosting Environment)
+            </p>
+          </div>
+          <div
+            class="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm component-card"
+          >
+            <i class="fas fa-lock icon-large text-blue-600 mr-3"></i>
+            <p class="text-gray-700 font-medium">SSH (Secure Deployment)</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-10">
+        <h2
+          class="text-2xl font-semibold text-gray-700 mb-4 border-b-2 border-accent pb-2 flex items-center"
+        >
+          <i class="fas fa-sync-alt text-indigo-500 mr-2"></i> Pipeline Flow
+        </h2>
+
+        <!-- Modern Pipeline Flow Diagram similar to attached image -->
+        <div class="flow-container">
+          <div class="flow-step step-github px-4">
+            <i class="fab fa-github mr-2"></i> GitHub Push
+          </div>
+          <div class="flow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="flow-step step-webhook px-4">
+            <i class="fas fa-bolt mr-2"></i> Webhook Trigger
+          </div>
+          <div class="flow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="flow-step step-test px-4">
+            <i class="fas fa-vial mr-2"></i> Test
+          </div>
+          <div class="flow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="flow-step step-build px-4">
+            <i class="fas fa-cogs mr-2"></i> Build
+          </div>
+          <div class="flow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="flow-step step-deploy px-4">
+            <i class="fas fa-upload mr-2"></i> Deploy
+          </div>
+          <div class="flow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="flow-step step-live px-4">
+            <i class="fas fa-globe mr-2"></i> Live
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="font-medium text-gray-800 mb-2">Process Details:</h3>
+          <ol class="list-decimal list-inside space-y-3 text-gray-700">
+            <li>
+              <i class="fas fa-code-branch text-indigo-500 mr-1"></i> Code
+              changes pushed to GitHub.
+            </li>
+            <li>
+              <i class="fas fa-bolt text-indigo-500 mr-1"></i> GitHub Actions
+              workflow triggered automatically.
+            </li>
+            <li>
+              <i class="fas fa-vial text-indigo-500 mr-1"></i> Code is checked
+              out, dependencies installed, and tests are run in a dedicated test
+              job.
+            </li>
+            <li>
+              <i class="fas fa-shield-alt text-indigo-500 mr-1"></i> Upon
+              successful tests, the deployment job uses SSH to connect securely
+              to the AWS EC2 instance.
+            </li>
+            <li>
+              <i class="fas fa-download text-indigo-500 mr-1"></i> Latest code
+              is pulled from the main branch onto the EC2 instance.
+            </li>
+            <li>
+              <i class="fas fa-box text-indigo-500 mr-1"></i> Application
+              dependencies are installed with npm ci for production reliability.
+            </li>
+            <li>
+              <i class="fas fa-play-circle text-indigo-500 mr-1"></i>
+              Application is started or restarted using PM2 with health check
+              verification.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="mb-10">
+        <h2
+          class="text-2xl font-semibold text-gray-700 mb-4 border-b-2 border-accent pb-2 flex items-center"
+        >
+          <i class="fas fa-award text-indigo-500 mr-2"></i> Key Achievements &
+          Benefits
+        </h2>
+        <ul class="list-disc list-inside space-y-3 text-gray-700">
+          <li>
+            <span class="font-medium"
+              ><i class="fas fa-robot text-indigo-500 mr-1"></i> Automated
+              Deployment:</span
+            >
+            Eliminates manual steps, reducing errors and increasing speed.
+          </li>
+          <li>
+            <span class="font-medium"
+              ><i class="fas fa-tachometer-alt text-indigo-500 mr-1"></i> Faster
+              Feedback Loop:</span
+            >
+            Code changes are tested and deployed rapidly.
+          </li>
+          <li>
+            <span class="font-medium"
+              ><i class="fas fa-check-double text-indigo-500 mr-1"></i> Improved
+              Reliability:</span
+            >
+            Consistent, repeatable deployment process with automated testing.
+          </li>
+          <li>
+            <span class="font-medium"
+              ><i class="fas fa-user-shield text-indigo-500 mr-1"></i> Secure
+              Credential Management:</span
+            >
+            Utilized GitHub Secrets for sensitive information.
+          </li>
+          <li>
+            <span class="font-medium"
+              ><i class="fas fa-expand-arrows-alt text-indigo-500 mr-1"></i>
+              Foundation for Scalability:</span
+            >
+            Environment configuration ensures consistent Node.js runtime and
+            process management.
+          </li>
+        </ul>
+      </section>
+
+      <section class="text-center">
+        <h2
+          class="text-2xl font-semibold text-gray-700 mb-6 border-b-2 border-accent pb-2 flex items-center justify-center"
+        >
+          <i class="fas fa-external-link-alt text-indigo-500 mr-2"></i> Learn
+          More
+        </h2>
+        <div
+          class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4"
+        >
+          <a
+            href="[Your GitHub Repo URL]"
+            target="_blank"
+            class="inline-flex items-center justify-center btn-github text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+          >
+            <i class="fab fa-github mr-2"></i> View on GitHub
+          </a>
+          <a
+            href="[Your Live Demo URL]"
+            target="_blank"
+            class="inline-flex items-center justify-center btn-demo text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+          >
+            <i class="fas fa-play-circle mr-2"></i> See Live Demo
+          </a>
+          <button
+            id="contactButton"
+            class="inline-flex items-center justify-center btn-tutorial text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+          >
+            <i class="fas fa-book mr-2"></i> See the Tutorial
+          </button>
+        </div>
+        <p id="contactMessage" class="mt-4 text-gray-600 italic hidden">
+          <i class="fas fa-info-circle mr-1"></i> Follow the step-by-step
+          tutorial to create your own CI/CD pipeline!
+        </p>
+      </section>
+    </div>
+
+    <footer class="text-center text-gray-500 text-sm mt-8">
+      Created with <i class="fas fa-heart text-red-500"></i> for showcasing
+      CI/CD skills.
+    </footer>
+
+    <script>
+      // Simple JavaScript for button interactivity
+      document
+        .getElementById("contactButton")
+        .addEventListener("click", function () {
+          const message = document.getElementById("contactMessage");
+          message.classList.toggle("hidden"); // Toggle visibility of the message
+
+          // Open the tutorial in a popup window
+          window.open(
+            "tutorial.html",
+            "CI/CD Tutorial",
+            "width=800,height=700,resizable=yes,scrollbars=yes"
+          );
+        });
+    </script>
+  </body>
+</html>

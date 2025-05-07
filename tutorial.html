@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CI/CD Pipeline Tutorial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        color: #374151;
+      }
+      .code-block {
+        background: #f3f4f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: monospace;
+        margin: 1rem 0;
+      }
+      .terminal {
+        background: #1a202c;
+        color: #9ca3af;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: monospace;
+        margin: 1rem 0;
+      }
+      .terminal .command {
+        color: #e5e7eb;
+      }
+      .terminal .output {
+        color: #6b7280;
+      }
+      h2 {
+        border-bottom: 2px solid #6366f1;
+        padding-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body class="p-6 max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">
+      Building a Simple CI/CD Pipeline with GitHub Actions and AWS EC2
+    </h1>
+
+    <p class="mb-4">
+      This condensed guide walks you through setting up a CI/CD pipeline using
+      GitHub Actions to deploy a Node.js app to AWS EC2.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">Prerequisites</h2>
+    <ul class="list-disc pl-6 space-y-2 mb-6">
+      <li>GitHub account</li>
+      <li>AWS account with EC2 instance (Ubuntu recommended)</li>
+      <li>SSH access to your EC2 instance</li>
+      <li>Basic knowledge of Git, Node.js, and command line</li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">Step 1: Set Up Your App</h2>
+    <p>
+      Create a simple Node.js Express app with test files in your GitHub repo.
+    </p>
+    <p>Essential files: server.js, package.json, server.test.js</p>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">
+      Step 2: Prepare EC2 Instance
+    </h2>
+    <p>Install Node.js, npm, and PM2 on your EC2 instance:</p>
+
+    <div class="terminal">
+      <div class="command"># Install Node.js via NVM</div>
+      <div class="command">
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh
+        | bash
+      </div>
+      <div class="command">source ~/.bashrc</div>
+      <div class="command">nvm install node</div>
+      <div class="command"># Verify installation</div>
+      <div class="command">node --version</div>
+      <div class="output">v20.10.0</div>
+      <div class="command"># Install PM2 globally</div>
+      <div class="command">npm install -g pm2</div>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">
+      Step 3: Configure GitHub Secrets
+    </h2>
+    <ol class="list-decimal pl-6 space-y-2 mb-6">
+      <li>
+        Go to your GitHub repo → Settings → Secrets and variables → Actions
+      </li>
+      <li>
+        Add these secrets:
+        <ul class="list-disc pl-6 mt-2">
+          <li><strong>EC2_PRIVATE_KEY</strong>: Your SSH private key</li>
+          <li><strong>EC2_HOST</strong>: Your EC2 instance's IP/hostname</li>
+          <li>
+            <strong>EC2_USER</strong>: SSH username (usually "ubuntu" or
+            "ec2-user")
+          </li>
+          <li>
+            <strong>PER_TOKEN</strong>: GitHub Personal Access Token (for
+            private repos)
+          </li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">
+      Step 4: Create GitHub Actions Workflow
+    </h2>
+    <p>
+      Create a file at <code>.github/workflows/deploy.yml</code> in your
+      repository:
+    </p>
+
+    <div class="code-block">
+      <pre>
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'simple-web-server/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./simple-web-server
+        run: npm ci
+      
+      - name: Run tests
+        working-directory: ./simple-web-server
+        run: npm test
+
+  deploy:
+    name: Deploy to EC2
+    needs: test  # Only deploy if tests pass
+    runs-on: ubuntu-latest
+    environment: production  # Enables required approval for production
+    
+    steps:
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true  # Stop script execution if any command fails
+          script: |
+            # Setup directory
+            REPO_DIR="$HOME/github-aws-ec2"
+            mkdir -p "$REPO_DIR"
+            
+            # Clone or update repository
+            if [ -d "$REPO_DIR/.git" ]; then
+              cd "$REPO_DIR"
+              git fetch origin
+              git reset --hard origin/main
+            else
+              # Using deploy key method instead of personal token
+              git clone https://github.com/YOUR_USERNAME/github-actions-ec2.git "$REPO_DIR"
+            fi
+            
+            # Make sure Node.js is available
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            if ! command -v node &> /dev/null; then
+              echo "Installing Node.js..."
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              nvm install 18
+            fi
+            
+            # Ensure PM2 is installed
+            if ! command -v pm2 &> /dev/null; then
+              echo "Installing PM2..."
+              npm install -g pm2
+            fi
+            
+            # Deploy application
+            if [ -d "$REPO_DIR/simple-web-server" ]; then
+              cd "$REPO_DIR/simple-web-server"
+              echo "Installing dependencies..."
+              npm ci
+              
+              echo "Starting/restarting application with PM2..."
+              pm2 restart server.js 2>/dev/null || pm2 start server.js
+              
+              # Save PM2 process list and startup configuration
+              pm2 save
+              
+              echo "Application deployed successfully!"
+              echo "Health check:"
+              curl -s http://localhost:3000/health || echo "Health check failed"
+            else
+              echo "Error: simple-web-server directory not found"
+              echo "Contents of $REPO_DIR:"
+              ls -la "$REPO_DIR"
+              exit 1
+      </pre>
+    </div>
+    <p class="text-red-500 font-medium">
+      Remember to replace YOUR_USERNAME with your actual GitHub username!
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">Step 5: Test Your Pipeline</h2>
+    <ol class="list-decimal pl-6 space-y-2 mb-6">
+      <li>Make a change to your code</li>
+      <li>Push to GitHub</li>
+      <li>Check the Actions tab to see your workflow running</li>
+      <li>Once complete, check your app at http://YOUR-EC2-IP:PORT</li>
+    </ol>
+
+    <h2 class="text-2xl font-semibold mt-8 mb-4">Troubleshooting</h2>
+    <ul class="list-disc pl-6 space-y-2 mb-6">
+      <li>Check workflow logs in GitHub Actions tab</li>
+      <li>Verify SSH key is correctly formatted in GitHub Secrets</li>
+      <li>Make sure EC2 security groups allow SSH access</li>
+      <li>
+        Check AWS EC2 logs:
+        <code>sudo tail -f /var/log/cloud-init-output.log</code>
+      </li>
+    </ul>
+
+    <footer
+      class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-600"
+    >
+      <button
+        id="closeButton"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg"
+      >
+        Close Tutorial
+      </button>
+    </footer>
+
+    <script>
+      document
+        .getElementById("closeButton")
+        .addEventListener("click", function () {
+          window.close();
+        });
+    </script>
+  </body>
+</html>
