@@ -53,8 +53,7 @@ The CI/CD pipeline follows these steps:
 
 ## 📱 Demo & Usage
 
-- 🔗 [Live Demo](https://your-demo-url-here.com)
-- 📝 [Step-by-Step Tutorial](tutorial.html)
+- 📝 [Step-by-Step Tutorial](https://pantelistsagkas.github.io/cicd-portfolio/)
 
 ## 🚀 Getting Started
 
@@ -62,12 +61,12 @@ To set up a similar pipeline:
 
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/cicd-portfolio.git
+git clone https://github.com/PantelisTsagkas/github-actions-ec2.git
 
 # Configure GitHub Secrets for your project
-# - AWS_EC2_SSH_KEY
-# - AWS_HOST_DNS
-# - AWS_USERNAME
+# - secrets.EC2_HOST
+# - secrets.EC2_USER
+# - secrets.EC2_PRIVATE_KEY
 
 # Push to your repository to trigger the pipeline
 git push origin main
